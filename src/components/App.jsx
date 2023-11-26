@@ -2,12 +2,17 @@ import { Component } from 'react';
 import { Searchbar } from './Searchbar/Searchbar';
 import { fetchImgs } from './Api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
+import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
     gallery: [],
     query: '',
     page: 1,
+    totalPages: null,
+    isLoading: false,
+    error: false,
   };
 
   async componentDidUpdate(prevProps, prevState) {
@@ -18,15 +23,20 @@ export class App extends Component {
       const newQuery = searchValue[1];
 
       try {
-        const images = await fetchImgs(newQuery);
-        console.log(images);
-        this.setState({ gallery: images.hits });
+        this.setState({ isLoading: true });
+
+        const { hits, totalHits } = await fetchImgs(newQuery, page);
+
+        this.setState(prevState => ({
+          gallery: [...prevState.gallery, ...hits],
+          totalPages: Math.ceil(totalHits / 12),
+          isLoading: false,
+          error: false,
+        }));
       } catch (error) {
         console.error('Error in fetch:', error);
+        this.setState({ error: true, isLoading: false });
       }
-      // ОТРЕЗАТЬ ID ЗАПРОСА ИЗ QUERY
-      // делаем http запрос с query и page
-      // записываем результат в images
     }
   }
 
@@ -36,28 +46,43 @@ export class App extends Component {
 
     this.setState({
       query: `${Date.now()}/${inputValue}`,
-      page: 1,
       gallery: [],
+      page: 1,
+      totalPages: null,
     });
   };
 
-  // handleLoadMore = () => {
-  //   this.setState(prevState => {
-  //     return {
-  //       page: prevState.page + 1,
-  //     };
-  //   });
-  // };
+  handleLoadMore = () => {
+    this.setState(prevState => {
+      return {
+        page: prevState.page + 1,
+      };
+    });
+  };
 
   render() {
-    const gallery = this.state.gallery;
+    const { gallery, page, totalPages, isLoading, error } = this.state;
+    const galleryLength = gallery.length !== 0;
+    const lastPage = totalPages === page;
+
     return (
       <div>
         <Searchbar onSubmit={this.onSubmit} />
 
-        <ImageGallery items={gallery} />
+        {isLoading && <Loader />}
 
-        <button onClick={this.handleLoadMore}>Load more</button>
+        {error && (
+          <p>Oops! Something went wrong! Please try reloading this page!</p>
+        )}
+
+        {galleryLength && <ImageGallery items={gallery} />}
+
+        {galleryLength &&
+          (!lastPage ? (
+            <Button onClick={this.handleLoadMore} name={'Load more'}></Button>
+          ) : (
+            <p>Sorry! It`s the end of search, you reviewed all results.</p>
+          ))}
       </div>
     );
   }
