@@ -10,13 +10,13 @@ export class ImageGalleryItem extends Component {
   };
 
   render() {
-    const { image, largeImage, tags } = this.props;
-    const { modalIsOpen } = this.state;
+    // const { image, largeImage, tags } = this.props;
+    // const { modalIsOpen } = this.state;
 
     return (
       <>
         <li onClick={this.toggleModal}>
-          <img src={image} alt={tags} />
+          {/* <img src={image} alt={tags} /> */}
         </li>
       </>
     );
