@@ -7,7 +7,7 @@ export class ImageGalleryItem extends Component {
   };
 
   toggleModal = () => {
-    this.setState(prevState => ({ modalIsOpen: !prevState.isModalOpen }));
+    this.setState(prevState => ({ isModalOpen: !prevState.isModalOpen }));
   };
 
   render() {
@@ -18,15 +18,15 @@ export class ImageGalleryItem extends Component {
       <>
         <li onClick={this.toggleModal}>
           <img src={image} alt={tags} />
+          {isModalOpen && (
+            <ImgModal
+              isOpen={isModalOpen}
+              onRequestClose={this.toggleModal}
+              largeImage={largeImage}
+              tags={tags}
+            />
+          )}
         </li>
-        {isModalOpen && (
-          <ImgModal
-            isOpen={isModalOpen}
-            onClose={this.toggleModal}
-            largeImage={largeImage}
-            tags={tags}
-          />
-        )}
       </>
     );
   }

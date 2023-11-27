@@ -1,32 +1,39 @@
-// import Modal from 'react-modal';
-// import { ModalStyled, Overlay } from './Modal.styled';
+import Modal from 'react-modal';
 
-// Modal.setAppElement('#root');
+const customStyles = {
+  overlay: {
+    position: 'fixed',
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1200,
+  },
+  content: {
+    maxWidth: 'calc(100vw - 48px)',
+    maxHeight: 'calc(100vh - 24px)',
+    position: 'relative',
+    overflow: 'hidden',
+    outline: 'none',
+    border: 'none',
+    background: 'none',
+  },
+};
 
-// const customStyles = {
-//   content: {
-//     top: '50%',
-//     left: '50%',
-//     right: 'auto',
-//     bottom: 'auto',
-//     marginRight: '-50%',
-//     transform: 'translate(-50%, -50%)',
-//   },
-// };
+Modal.setAppElement('#root');
 
-// export const ImgModal = ({ largeImg, tags, isOpen, onClose }) => {
-//   return (
-//     <Modal
-//       isOpen={isOpen}
-//       onRequestClose={onClose}
-//       contentLabel="Big Image"
-//       style={customStyles}
-//     >
-//       <Overlay>
-//         <ModalStyled>
-//           <img src={largeImg} alt={tags} />
-//         </ModalStyled>
-//       </Overlay>
-//     </Modal>
-//   );
-// };
+export const ImgModal = ({ isOpen, onRequestClose, largeImage, tags }) => {
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onRequestClose}
+      style={customStyles}
+      contentLabel="Large image"
+      shouldCloseOnOverlayClick={true}
+    >
+      <img src={largeImage} alt={tags} />
+    </Modal>
+  );
+};
