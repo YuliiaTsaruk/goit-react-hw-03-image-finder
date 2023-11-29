@@ -38,11 +38,11 @@ export class App extends Component {
         }));
       } catch (error) {
         this.setState({ error: true, isLoading: false });
-        toast.error('Oops! Something went wrong! Please try reloading this page!')
+        this.showToastError('Oops! Something went wrong! Please try reloading this page!');
       }
     }
   }
-
+  
   onSubmit = evt => {
     evt.preventDefault();
     const inputValue = evt.target.elements.query.value;
@@ -53,6 +53,8 @@ export class App extends Component {
       page: 1,
       totalPages: null,
     });
+
+    evt.target.reset();
   };
 
   handleLoadMore = () => {
@@ -64,6 +66,9 @@ export class App extends Component {
    
   }
 
+  showToastError = (errorMessage) => {
+    toast.error(errorMessage);
+  };
 
   render() {
     const { gallery, page, totalPages, isLoading, error } = this.state;
@@ -91,6 +96,8 @@ export class App extends Component {
             <Messege>Sorry! It`s the end of search, you reviewed all results.</Messege>
           ))}
         </Container>
+        <Toaster  position="top-right"
+  reverseOrder={false}/>
         <GlobalStyle />
       </div>
     );
