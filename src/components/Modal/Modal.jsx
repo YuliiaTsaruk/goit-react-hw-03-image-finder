@@ -1,4 +1,5 @@
 import Modal from 'react-modal';
+import { ModalImg } from './Modal.styled';
 
 const customStyles = {
   overlay: {
@@ -12,10 +13,8 @@ const customStyles = {
     zIndex: 1200,
   },
   content: {
-    maxWidth: 'calc(100vw - 48px)',
-    maxHeight: 'calc(100vh - 24px)',
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'auto',
     outline: 'none',
     border: 'none',
     background: 'none',
@@ -31,9 +30,8 @@ export const ImgModal = ({ isOpen, onRequestClose, largeImage, tags }) => {
       onRequestClose={onRequestClose}
       style={customStyles}
       contentLabel="Large image"
-      shouldCloseOnOverlayClick={true}
     >
-      <img src={largeImage} alt={tags} />
+      <ModalImg src={largeImage} alt={tags} />
     </Modal>
   );
 };

@@ -4,6 +4,9 @@ import { fetchImgs } from './Api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
+import { Container, Messege,} from './App.styled';
+import { GlobalStyle } from './GlobalStyled';
+import toast, { Toaster } from 'react-hot-toast';
 
 export class App extends Component {
   state = {
@@ -34,8 +37,8 @@ export class App extends Component {
           error: false,
         }));
       } catch (error) {
-        console.error('Error in fetch:', error);
         this.setState({ error: true, isLoading: false });
+        toast.error('Oops! Something went wrong! Please try reloading this page!')
       }
     }
   }
@@ -58,7 +61,9 @@ export class App extends Component {
         page: prevState.page + 1,
       };
     });
-  };
+   
+  }
+
 
   render() {
     const { gallery, page, totalPages, isLoading, error } = this.state;
@@ -67,22 +72,26 @@ export class App extends Component {
 
     return (
       <div>
-        <Searchbar onSubmit={this.onSubmit} />
+        <Container>
+          <Searchbar onSubmit={this.onSubmit} />
 
-        {isLoading && <Loader />}
+          {isLoading && <Loader />}
 
-        {error && (
-          <p>Oops! Something went wrong! Please try reloading this page!</p>
-        )}
+          {error && (
+            <Toaster  position="top-right"
+  reverseOrder={false}/>
+          )}
 
-        {galleryLength && <ImageGallery items={gallery} />}
+          {galleryLength && <ImageGallery items={gallery} />}
 
-        {galleryLength &&
+          {galleryLength &&
           (!lastPage ? (
             <Button onClick={this.handleLoadMore} name={'Load more'}></Button>
           ) : (
-            <p>Sorry! It`s the end of search, you reviewed all results.</p>
+            <Messege>Sorry! It`s the end of search, you reviewed all results.</Messege>
           ))}
+        </Container>
+        <GlobalStyle />
       </div>
     );
   }
